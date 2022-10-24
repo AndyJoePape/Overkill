@@ -41,9 +41,11 @@ def combineTextAndKey(plainText, key):
     return ''.join(''.join(f for f in tup) for tup in zip(plainText, key))
 
 
-plainText = input("Enter plaintext:\n").replace(" ", "").lower()
-key = generateRandomKey(plainText)
-encryptedText = "".join([str(i) for i in encryptMessage(plainText, key)])
-encryptedKey = "".join([str(i) for i in encryptMessage(key, encryptedText)])
-cipherOutput = "".join([str(i) for i in combineTextAndKey(encryptedText, encryptedKey)])
-print(cipherOutput)
+def encrypt():
+    plainText = input("Enter plaintext: ").replace(" ", "").lower()
+    key = generateRandomKey(plainText)
+    encryptedText = "".join([str(i) for i in encryptMessage(plainText, key)])
+    encryptedKey = "".join([str(i) for i in encryptMessage(key, encryptedText)])
+    cipherOutput = "".join([str(i) for i in combineTextAndKey(encryptedText, encryptedKey)])
+    print("Encrypted Message: " + cipherOutput, end="\n\n")
+
