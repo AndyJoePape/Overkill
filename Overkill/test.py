@@ -1,6 +1,5 @@
-from dict import alphabet
-
-def test(keyCheck):
-    print([item for item in alphabet.items() if item.__contains__(keyCheck)][0])
-        
-test('b')
+def getShiftedNumber(startLetter, shiftCount, direction):
+    if direction == "right":
+        return ''.join(chr((ord(char) - 97 + shiftCount) % 26 + 97) for char in startLetter)
+    else:
+        return ''.join(chr((ord(char) - 97 - shiftCount) % 26 + 97) for char in startLetter)

@@ -1,60 +1,20 @@
-from ast import Mod
 from enum import Enum
-from operator import index
-import string
-import random
 from tokenize import String
-class Letters(Enum):
-    a = 1
-    b = 2
-    c = 3
-    d = 4
-    e = 5
-    f = 6
-    g = 7
-    h = 8
-    i = 9
-    j = 10
-    k = 11
-    l = 12
-    m = 13
-    n = 14
-    o = 15
-    p = 16
-    q = 17
-    r = 18
-    s = 19
-    t = 20
-    u = 21
-    v = 22
-    w = 23
-    x = 24
-    y = 25
-    z = 26
+from dict import alphabet
   
 def isEven(num):
     return not bool(num %2)
   
-def convertToShift(text):
-    inputText = list(text)
+def convertToShift(input, isNumber):
     output = []
-    for char in inputText:
-        for letter in Letters:
-            if char == letter.name:
-                output.append(letter.value)
-                break
-
-    return output
-
-def convertShiftToText(shiftList):
-    output = []
-    for num in shiftList:
-        for letter in Letters:
-            if num == letter.value:
-                output.append(letter.name)
-                break
-
-    return output
+    input = list(input)
+    for char in input:
+        shiftCount = [item for item in alphabet.items() if item.__contains__(char)][0]
+        if isNumber==False:
+            output.append(shiftCount[1])
+        else:
+            output.append(shiftCount[0])
+    return output 
     
 def getShiftedNumber(shiftCount, startingIndex, direction):
     index = startingIndex - 1
@@ -79,15 +39,15 @@ def getShiftedNumber(shiftCount, startingIndex, direction):
 
 
 def decryptMessage(plainText, key):
-    inputText = convertToShift(plainText)
-    keyList = convertToShift(key)
+    inputText = convertToShift(plainText, False)
+    keyList = convertToShift(key, False)
     output = []
     
     for i in range(0, len(inputText)):
         output.append(getShiftedNumber(keyList[i], inputText[i], "left"))
     return output
 
-def decryptCipherText(cipherText):
+def parseCipherText(cipherText):
     text = []
     key = []
     for i in range(0, len(cipherText)):
@@ -97,8 +57,8 @@ def decryptCipherText(cipherText):
             key.append(cipherText[i])
     return [text, key]
 
-encryptedText = "yhooamdr"
-parsedEncryptedText = decryptCipherText(encryptedText)
+encryptedText = "rbbyllylpq"
+parsedEncryptedText = parseCipherText(encryptedText)
 
 decryptedKey = "".join([str(i) for i in decryptMessage(parsedEncryptedText[1], parsedEncryptedText[0])])
 decryptedText = "".join([str(i) for i in decryptMessage(parsedEncryptedText[0], decryptedKey)])
