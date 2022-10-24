@@ -57,7 +57,7 @@ def parseCipherText(cipherText):
             key.append(cipherText[i])
     return [text, key]
 
-encryptedText = "rbbyllylpq"
+encryptedText = "mrgiaptbbokyicmhszsh"
 parsedEncryptedText = parseCipherText(encryptedText)
 
 decryptedKey = "".join([str(i) for i in decryptMessage(parsedEncryptedText[1], parsedEncryptedText[0])])
