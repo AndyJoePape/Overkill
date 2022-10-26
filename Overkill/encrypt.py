@@ -15,21 +15,27 @@ def getNumberOrIndexFromDict(letterOrIndex):
         0 if str(letterOrIndex).isnumeric() else 1]
 
 
-def getShiftedNumber(startLetter, shiftCount, direction):
-    finalIndex = getNumberOrIndexFromDict(startLetter)
-
-    if direction == "right":
+def getShiftedNumber(startLetter, shiftCount, encrypts):
+    if encrypts:
+        finalIndex = getNumberOrIndexFromDict(startLetter)
         finalIndex += shiftCount
+
+        while finalIndex > len(alphabet):
+            finalIndex -= len(alphabet)
     else:
+        finalIndex = startLetter
         finalIndex -= shiftCount
 
-    while finalIndex > len(alphabet):
-        finalIndex -= len(alphabet)
+        print(finalIndex)
+
+        while finalIndex <= 0:
+            finalIndex += len(alphabet)
+
     return getNumberOrIndexFromDict(finalIndex)
 
 
 def encryptMessage(plainText, key):
-    return [getShiftedNumber(plainText[i], convertToShift(key)[i], "right") for i in
+    return [getShiftedNumber(plainText[i], convertToShift(key)[i], True) for i in
             range(0, len(convertToShift(plainText)))]
 
 
@@ -48,4 +54,3 @@ def encrypt():
     encryptedKey = "".join([str(i) for i in encryptMessage(key, encryptedText)])
     cipherOutput = "".join([str(i) for i in combineTextAndKey(encryptedText, encryptedKey)])
     print("Encrypted Message: " + cipherOutput, end="\n\n")
-
