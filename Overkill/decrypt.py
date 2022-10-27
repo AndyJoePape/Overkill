@@ -29,6 +29,6 @@ def parseCipherText(cipherText):
 def decrypt():
     parsedEncryptedText = parseCipherText(input("Enter ciphertext: "))
 
-    decryptedKey = "".join([str(i) for i in decryptMessage(parsedEncryptedText[1], parsedEncryptedText[0])])
-    decryptedText = "".join([str(i) for i in decryptMessage(parsedEncryptedText[0], decryptedKey)])
+    decryptedKey = "".join([str(i) for i in decryptMessage(''.join(parsedEncryptedText[0]), ''.join(parsedEncryptedText[1]))])
+    decryptedText = "".join([str(i) for i in decryptMessage(decryptedKey, ''.join(parsedEncryptedText[0]))])
     print("decrypted message: " + decryptedText, end="\n\n")

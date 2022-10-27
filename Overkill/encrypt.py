@@ -26,8 +26,6 @@ def getShiftedNumber(startLetter, shiftCount, encrypts):
         finalIndex = startLetter
         finalIndex -= shiftCount
 
-        print(finalIndex)
-
         while finalIndex <= 0:
             finalIndex += len(alphabet)
 
@@ -48,7 +46,7 @@ def combineTextAndKey(plainText, key):
 
 
 def encrypt():
-    plainText = input("Enter plaintext: ").replace(" ", "").lower()
+    plainText = input("Enter plaintext: ").replace(" ", "");
     key = generateRandomKey(plainText)
     encryptedText = "".join([str(i) for i in encryptMessage(plainText, key)])
     encryptedKey = "".join([str(i) for i in encryptMessage(key, encryptedText)])
