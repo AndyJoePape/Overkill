@@ -46,9 +46,13 @@ def combineTextAndKey(plainText, key):
 
 
 def encrypt():
-    plainText = input("Enter plaintext: ").replace(" ", "");
+    plainText = input("Enter plaintext: ").replace(" ", "€");
     key = generateRandomKey(plainText)
+    
     encryptedText = "".join([str(i) for i in encryptMessage(plainText, key)])
     encryptedKey = "".join([str(i) for i in encryptMessage(key, encryptedText)])
     cipherOutput = "".join([str(i) for i in combineTextAndKey(encryptedText, encryptedKey)])
+    
     print("Encrypted Message: " + cipherOutput, end="\n\n")
+    
+    

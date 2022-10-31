@@ -31,4 +31,5 @@ def decrypt():
 
     decryptedKey = "".join([str(i) for i in decryptMessage(''.join(parsedEncryptedText[0]), ''.join(parsedEncryptedText[1]))])
     decryptedText = "".join([str(i) for i in decryptMessage(decryptedKey, ''.join(parsedEncryptedText[0]))])
-    print("decrypted message: " + decryptedText, end="\n\n")
+    
+    print("decrypted message: " + decryptedText.replace("€", " "), end="\n\n") 

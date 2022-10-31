@@ -43,7 +43,8 @@ def displayChoices(choices):
 
 
 def clear():
-    os.system("cls" if platform == "windows" else "clear")
+    print(platform)
+    os.system("cls" if platform.__contains__("win") else "clear")
 
 
 if __name__ == '__main__':
