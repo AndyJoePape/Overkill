@@ -1,6 +1,5 @@
-from dict import alphabet
+from encrypt import countBlocks
 
-def test(keyCheck):
-    print([item for item in alphabet.items() if item.__contains__(keyCheck)][0])
-        
-test('b')
+
+if __name__ == '__main__':
+    print(countBlocks(""))

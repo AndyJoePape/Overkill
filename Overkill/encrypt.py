@@ -1,87 +1,92 @@
-from enum import Enum
 from dict import alphabet
-from operator import index
-import string
 import random
-from tokenize import String
-    
+
+
+# Returns a random alphanumeric value from our created alphabet
 def getRandomNumber():
-    return random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26])
+    return random.choice(list(alphabet.values()))
 
-def convertToShift(text):
-    inputText = list(text)
-    output = []
-    for char in inputText:
-        for letter in Letters:
-            if char == letter.name:
-                output.append(letter.value)
-                break
 
-    return output
+# Converts a list of input alphanumeric letters into shift numbers
+def convertToShift(input):
+    return [getNumberOrIndexFromDict(char) for char in list(input)]
 
-def convertShiftToText(shiftList):
-    output = []
-    for num in shiftList:
-        for letter in alphabet:
-            if num == letter.value:
-                output.append(letter.name)
-                break
-            
-    return output
-    
-def getShiftedNumber(shiftCount, startingIndex, direction):
-    index = startingIndex - 1
-    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-    if direction == "right":
-        while shiftCount!=0:
-            if(index!=25):
-                index = index+1
-                shiftCount = shiftCount-1
-            else:
-                index=0
-                shiftCount = shiftCount-1
+
+# Returns the number associated with an alphanumeric value when given an alphanumeric value
+# Returns the alphanumeric value when given a number
+def getNumberOrIndexFromDict(letterOrIndex):
+    return [item for item in alphabet.items() if item.__contains__(letterOrIndex)][0][
+        0 if str(letterOrIndex).isnumeric() else 1]
+
+
+# Performs the shift on a letter or number, increments by shiftCount, Encrypts determines left or right
+def getShiftedNumber(startLetter, shiftCount, encrypts):
+    if encrypts:
+        finalIndex = getNumberOrIndexFromDict(startLetter)
+        finalIndex += shiftCount
+
+        while finalIndex > len(alphabet):
+            finalIndex -= len(alphabet)
     else:
-        while shiftCount!=0:
-            if(index!=0):
-                index = index-1
-                shiftCount = shiftCount-1
-            else:
-                index=25
-                shiftCount = shiftCount-1
-    return alphabet[index]
+        finalIndex = startLetter
+        finalIndex -= shiftCount
 
+        while finalIndex <= 0:
+            finalIndex += len(alphabet)
+
+    return getNumberOrIndexFromDict(finalIndex)
+
+
+# Encrypys a plainText and a key, shifts the plain text by the converted to numbers key
 def encryptMessage(plainText, key):
-    inputText = convertToShift(plainText)
-    keyList = convertToShift(key)
-    output = []
-    
-    for i in range(0, len(inputText)):
-        output.append(getShiftedNumber(keyList[i], inputText[i], "right"))
-    return output
+    return [getShiftedNumber(plainText[i], convertToShift(key)[i], True) for i in
+            range(0, len(convertToShift(plainText)))]
 
+
+# Generates a random number based on the length of the plainText
 def generateRandomKey(plainText):
-    keyLength = len(plainText)
-    shiftList = []
-    for i in range(0, keyLength):
-        shiftList.append(getRandomNumber())
-    key = convertShiftToText(shiftList)
-    
-    return key
+    return convertToShift([getRandomNumber() for i in range(0, len(plainText))])
 
+
+# combines the plainText and key by doing every other
 def combineTextAndKey(plainText, key):
-    output = []
-    text = list(plainText)
-    keyList = list(key)
-    for i in range(0, len(text)):
-        output.append(text[i])
-        output.append(keyList[i])
-    return output
+    return ''.join(''.join(f for f in tup) for tup in zip(plainText, key))
 
 
-plainText = input("Enter plaintext:\n")
-plainText = plainText.replace(" ", "").lower()
-key = generateRandomKey(plainText) 
-encryptedText = "".join([str(i) for i in encryptMessage(plainText, key)])
-encryptedKey = "".join([str(i) for i in encryptMessage(key, encryptedText)])
-cipherOutput  = "".join([str(i) for i in combineTextAndKey(encryptedText, encryptedKey)])
-print(cipherOutput)
+def countBlocks(plainText):
+    return int(len(plainText) / 32) + 1
+
+
+def getBlock(value, blockNum):
+    return value[blockNum * 31:(blockNum + 1) * 31]
+
+
+def buildBlocks(plainText):
+    numBloc = countBlocks(plainText)
+    paddedPlaintext = plainText.ljust(numBloc * 31, 'a')
+
+    return [(getBlock(paddedPlaintext, i), generateRandomKey(getBlock(paddedPlaintext, i))) for i in range(0, numBloc)]
+
+
+def getLengthOfFinalBlock(plainText):
+    return 31 - (len(plainText) % 31)
+
+def encryptPlainText(plainText: str):
+    blocks = buildBlocks(plainText.replace(" ", "æ"))
+    cipherText = ""
+
+    for i in range(0, len(blocks)):
+        encryptedText = "".join(str(i) for i in encryptMessage(blocks[i][0], blocks[i][1]))
+        encryptedKey = "".join([str(i) for i in encryptMessage(blocks[i][1], encryptedText)])
+        cipher = "".join([str(i) for i in combineTextAndKey(encryptedText, encryptedKey)])
+        cipherText += cipher
+        if i == len(blocks) - 1:
+            cipherText += getNumberOrIndexFromDict(getLengthOfFinalBlock(plainText))
+
+    return "".join(cipherText)
+
+
+
+# main encrypt function for terminal
+def encrypt():
+    print("Encrypted Message: " + "".join(encryptPlainText(input("Enter plaintext: "))), end="\n\n")
