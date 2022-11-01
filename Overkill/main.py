@@ -37,6 +37,7 @@ def load(choice, callback):
             else:
                 print(f'Loading {choice} ' + i, end='\r')
 
+
 def displayChoices(choices):
     print("What would you like to do (q to quit): ")
     [print(f"{index} - {choice}") for index, choice in enumerate(choices)]

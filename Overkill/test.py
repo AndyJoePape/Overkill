@@ -1,7 +1,5 @@
-from dict import alphabet
-def getShiftedNumber(startLetter, shiftCount, direction):
-    if direction == "right":
-        return ''.join(chr((ord(char) - 97 + shiftCount) % 26 + 97) for char in startLetter)
-    else:
-        return ''.join(chr((ord(char) - 97 - shiftCount) % 26 + 97) for char in startLetter)
+from encrypt import countBlocks
 
+
+if __name__ == '__main__':
+    print(countBlocks(""))
