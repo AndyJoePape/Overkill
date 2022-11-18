@@ -72,7 +72,7 @@ def getLengthOfFinalBlock(plainText):
     return 31 - (len(plainText) % 31)
 
 def encryptPlainText(plainText: str):
-    blocks = buildBlocks(plainText.replace(" ", "æ"))
+    blocks = buildBlocks(plainText.replace(" ", "|"))
     cipherText = ""
 
     for i in range(0, len(blocks)):

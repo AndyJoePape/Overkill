@@ -25,11 +25,12 @@ def parseCipherText(cipherText):
     return [text, key, length]
 
 def decryptPlainText(cipherText: str):
+    print(cipherText)
     parsedCipherText = parseCipherText(cipherText)
     decryptedKey = "".join(
         [str(i) for i in decryptMessage(''.join(parsedCipherText[0]), ''.join(parsedCipherText[1]))])
     decryptedText = "".join([str(i) for i in decryptMessage(decryptedKey, ''.join(parsedCipherText[0]))])
-    return decryptedText.replace("æ", " ")[0:-parsedCipherText[2]]
+    return decryptedText.replace("|", " ")[0:-parsedCipherText[2]]
 
 
 # main decrypt function for terminal
